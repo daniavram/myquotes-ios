@@ -33,12 +33,4 @@ extension QuotesDelegate: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let count = self.stateController.quotes?.count,
-            indexPath.row == count - 2,
-            let _ = self.viewController.nextPage {
-                self.viewController.updateQuotes()
-        }
-    }
-    
 }

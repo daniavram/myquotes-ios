@@ -73,6 +73,10 @@ extension Theme {
         
         let textView = UITextView.appearance()
         textView.tintColor = Theme.primary.color
+        
+        let searchBar = UISearchBar.appearance()
+        searchBar.tintColor = Theme.primary.color
+//        searchBar.barTintColor = Theme.lightBackground.color
     }
     
 }
