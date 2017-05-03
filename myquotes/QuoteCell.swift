@@ -23,7 +23,7 @@ class QuoteCell: UITableViewCell {
     
     var quoteText: String? {
         didSet {
-            self.quoteTextLabel.text = quoteText
+            self.quoteTextLabel.htmlText = quoteText ?? ""
         }
     }
     

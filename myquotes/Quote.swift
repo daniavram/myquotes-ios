@@ -103,28 +103,12 @@ class Quote: Mappable {
         }
     )
     
-    private let quoteTextPrettify = TransformOf<String, String>(
-        fromJSON: { (value: String?) -> String? in
-            
-            guard let value = value else {
-                return nil
-            }
-            
-            let decodedString = try? value.htmlDecode()
-            
-            return decodedString
-        
-        }, toJSON: { (value: String?) -> String? in
-            return value
-        }
-    )
-    
     func mapping(map: Map) {
         self._id <- map["id"]
         self._created <- (map["created"], datePrettify)
         self._modified <- (map["modified"], datePrettify)
         self._title <- map["title"]
-        self._text <- (map["text"], quoteTextPrettify)
+        self._text <- (map["text"])
         self._author <- map["author"]
         self._category <- map["category"]
         self._tags <- map["tags"]

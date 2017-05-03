@@ -10,24 +10,6 @@ import Foundation
 import UIKit
 import TagListView
 
-extension String {
-    
-    func htmlDecode() throws -> String {
-        
-        guard let data = data(using: .utf8, allowLossyConversion: true) else {
-            return self
-        }
-        
-        let options: [String: Any] = [
-            NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-            NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue
-        ]
-        
-        return try NSAttributedString(data: data, options: options, documentAttributes: nil).string
-        
-    }
-}
-
 extension Date {
     
     static let customDateFormat: String = "d MMMM yyyy '@' H:mm"
@@ -147,6 +129,41 @@ extension Array where Element: Tag {
         }
         
         return tagsIds
+    }
+    
+}
+
+extension UILabel {
+    
+    var htmlText: String {
+        get {
+            return self.attributedText?.string ?? ""
+        }
+        
+        set {
+            
+            var string = String(format: "<style>body{font-family: '%@'; font-size:%fpx;}</style>", self.font.fontName, self.font.pointSize)
+            string += newValue
+            
+            guard let unicodedData = string.data(using: .unicode) else {
+                self.attributedText = NSAttributedString(string: "")
+                return
+            }
+            
+            let options: [String: Any] = [
+                NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                NSCharacterEncodingDocumentAttribute: String.Encoding.unicode.rawValue
+            ]
+            
+            let attributed = try? NSAttributedString(data: unicodedData, options: options, documentAttributes: nil)
+            
+            if let attributed = attributed {
+                self.attributedText = attributed
+            } else {
+                self.attributedText = NSAttributedString(string: "")
+            }
+            
+        }
     }
     
 }
