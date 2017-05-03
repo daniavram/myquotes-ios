@@ -130,4 +130,18 @@ class Quote: Mappable {
         self._tags <- map["tags"]
     }
     
+    func has(tags searchTags: [Tag]) -> Bool {
+        
+        guard let tags = self.tags else {
+            return false
+        }
+        
+        let tagsSet = Set(tags)
+        let tagsSubset = Set(searchTags)
+        
+        let isSubset = tagsSubset.isSubset(of: tagsSet)
+        
+        return isSubset
+    }
+    
 }

@@ -18,8 +18,10 @@ class QuotesViewController: UITableViewController {
     var nextPage: Int? = nil
     
     fileprivate var initialQuotesResponse: QuotesResponse!
+    fileprivate var initialQuotes = [Quote]()
+    fileprivate var filteredQuotes = [Quote]()
     private var top: CGPoint!
-    private var selectedTags: [Tag]!
+    private var selectedTags = [Tag]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +48,7 @@ class QuotesViewController: UITableViewController {
         searchController.searchBar.sizeToFit()
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-        
-        searchController.searchBar.delegate = self
+        searchController.searchResultsUpdater = self
         
         let searchBarHeight = self.searchController.searchBar.frame.size.height
         top = CGPoint(x: tableView.contentOffset.x, y: tableView.contentOffset.y + searchBarHeight)
@@ -102,8 +103,10 @@ class QuotesViewController: UITableViewController {
                 self.nextPage = nil
             }
             
-            self.stateController?.quotes = quotes
             self.initialQuotesResponse = quotesResponse
+            self.initialQuotes = quotesResponse.quotes ?? [Quote]()
+            self.filteredQuotes = quotes
+            self.stateController?.quotes = quotes
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
         })
@@ -119,65 +122,56 @@ class QuotesViewController: UITableViewController {
         }
     }
     
-    func updateQuotes() {
-        API.getQuotes(page: self.nextPage!, containing: self.searchController.searchBar.text, completion: { quotesResponse in
-            guard let quotes = quotesResponse.quotes,
-                var stateControllerQuotes = self.stateController?.quotes else {
-                    return
-            }
-            
-            if let nextPage = quotesResponse.pages?.next {
-                self.nextPage = nextPage
-            } else {
-                self.nextPage = nil
-            }
-            
-            stateControllerQuotes = stateControllerQuotes + quotes
-            self.stateController?.quotes = stateControllerQuotes
-            self.tableView.reloadData()
-        })
-    }
-    
     func tagPressed(_ tag: Tag) {
         
+        let quotesForFiltering: [Quote]!
+        
         if let index = self.selectedTags.index(of: tag) {
+            quotesForFiltering = self.initialQuotes
             self.selectedTags.remove(at: index)
         } else {
+            quotesForFiltering = self.filteredQuotes
             self.selectedTags.append(tag)
         }
         
-        API.getQuotes(tags: self.selectedTags.stringify(), completion: { quotesResponse in
+        var filteredQuotes = [Quote]()
+        
+        for quote in quotesForFiltering {
             
-            guard let quotes = quotesResponse.quotes else {
-                return
+            if quote.has(tags: selectedTags) {
+                filteredQuotes.append(quote)
             }
             
-            self.stateController?.select(tags: self.selectedTags, in: quotes)
-            self.tableView.reloadData()
-        })
+        }
+
+        let quotes = filteredQuotes.isEmpty ? self.initialQuotes : filteredQuotes
+        
+        self.stateController?.select(tags: self.selectedTags, in: quotes)
+        self.filteredQuotes = quotes
+        self.tableView.reloadData()
     }
     
 }
 
-extension QuotesViewController: UISearchBarDelegate {
+extension QuotesViewController: UISearchResultsUpdating {
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        API.getQuotes(containing: searchBar.text, completion: { quotesResponse in
-            self.stateController?.quotes = quotesResponse.quotes
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        guard let text = self.searchController.searchBar.text?.lowercased(),
+            text != "" else {
+                self.stateController?.quotes = self.filteredQuotes
+                self.tableView.reloadData()
+                return
+        }
+        
+        let foundQuotes = self.filteredQuotes.filter({ quote in
+            let foundInTitle = quote.title?.lowercased().contains(text)
+            let foundInBody = quote.text?.lowercased().contains(text)
             
-            if let nextPage = quotesResponse.pages?.next {
-                self.nextPage = nextPage
-            } else {
-                self.nextPage = nil
-            }
-            
-            self.tableView.reloadData()
+            return foundInTitle! || foundInBody!
         })
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.stateController?.quotes = self.initialQuotesResponse.quotes
-        self.nextPage = self.initialQuotesResponse.pages?.next
+        
+        self.stateController?.quotes = foundQuotes
         self.tableView.reloadData()
     }
     

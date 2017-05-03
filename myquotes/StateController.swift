@@ -23,6 +23,7 @@ class StateController {
         
         for quote in quotes {
             for quoteTag in quote.tags! {
+                quoteTag.isSelected = false
                 for tag in tags {
                     if tag.id == quoteTag.id {
                         quoteTag.isSelected = true
