@@ -23,7 +23,7 @@ enum Endpoint: String {
     case tokenRefresh = "token/refresh/"
     case token = "token/verify/"
     
-    func url(id: Int? = nil, page: Int? = nil, search: String? = nil, tags: [String]? = nil) -> String {
+    func url(id: Int? = nil, search: String? = nil, tags: [String]? = nil) -> String {
         
         var endpointString: String = Endpoint.base + self.rawValue
         
@@ -31,17 +31,14 @@ enum Endpoint: String {
             
             switch self {
             case .quotes:
-                if let page = page {
-                    
-                    endpointString += "?page=\(page)"
-                    
-                    if let search = search, search != "" {
-                        endpointString += "&search=\(search)"
-                    }
-                    if let tags = tags {
-                        for tag in tags {
-                            endpointString += "&tags=\(tag)"
-                        }
+                endpointString += "?page=1&page_size=1000"
+                
+                if let search = search, search != "" {
+                    endpointString += "&search=\(search)"
+                }
+                if let tags = tags {
+                    for tag in tags {
+                        endpointString += "&tags=\(tag)"
                     }
                 }
             case .authors:
@@ -62,9 +59,8 @@ enum Endpoint: String {
 
 struct API {
     
-    private static var token = ""
-    
-    private static var headers: HTTPHeaders {
+    fileprivate static var token = ""
+    fileprivate static var headers: HTTPHeaders {
         
         let headers = [
             "Authorization" : "JWT " + API.token
@@ -73,11 +69,7 @@ struct API {
         return headers
     }
     
-    static func updateHeaders(token: String) {
-        API.token = token
-    }
-    
-    private static func url<T: Mappable>(for object: T, containing: String?) -> String {
+    fileprivate static func url<T: Mappable>(for object: T, containing: String?) -> String {
         
         var endpoint: Endpoint!
         
@@ -94,7 +86,7 @@ struct API {
         return endpoint.url(search: containing)
     }
     
-    private static func getObject<T:Mappable>(url: String, completion: @escaping (T?, Error?) -> Void ) {
+    fileprivate static func getObject<T:Mappable>(url: String, completion: @escaping (T?, Error?) -> Void ) {
         
         let resp = Alamofire.request(url, headers: API.headers).responseObject { (response: DataResponse<T>) in
             
@@ -108,7 +100,7 @@ struct API {
         debugPrint(resp)
     }
     
-    private static func getArray<T:Mappable>(url: String, completion: @escaping ([T]?, Error?) -> Void ) {
+    fileprivate static func getArray<T:Mappable>(url: String, completion: @escaping ([T]?, Error?) -> Void ) {
         
         Alamofire.request(url, headers: API.headers).responseArray { (response: DataResponse<[T]>) in
             
@@ -122,10 +114,35 @@ struct API {
         }
     }
     
+    fileprivate static func postObject<T: Mappable>(url: String, object: T, completion: @escaping (T?, Error?) -> Void ) {
+        
+        Alamofire.request(url, method: .post, parameters: object.toJSON(), encoding: JSONEncoding.default, headers: API.headers).responseObject { (response: DataResponse<T>) in
+            
+            guard let statusCode = response.response?.statusCode,
+                200..<300 ~= statusCode else {
+                    completion(nil, response.result.error)
+                    return
+            }
+            
+            let responseObject = response.result.value
+            
+            completion(responseObject, nil)
+        }
+        
+    }
+    
+}
+
+extension API {
+    
+    static func updateHeaders(token: String) {
+        API.token = token
+    }
+    
     static func getToken(authenticationRequest: Authentication, completion: @escaping (Authentication?) -> Void) {
         
         Alamofire.request(Endpoint.tokenNew.url(), method: .post, parameters: authenticationRequest.toJSON(), encoding: JSONEncoding.default).responseObject { (response: DataResponse<Authentication>) in
-        
+            
             guard let statusCode = response.response?.statusCode,
                 200..<300 ~= statusCode else {
                     completion(nil)
@@ -178,19 +195,6 @@ struct API {
         }
     }
     
-    static func getQuotes(page: Int = 1, containing: String? = nil, tags: [String]? = nil, completion: @escaping (QuotesResponse) -> Void) {
-        
-        let urlString = Endpoint.quotes.url(page: page, search: containing, tags: tags)
-        
-        API.getObject(url: urlString, completion: { (response: QuotesResponse?, error: Error?) -> Void in
-            
-            let quotesResponse = response ?? QuotesResponse()
-            
-            completion(quotesResponse)
-            
-        })
-    }
-    
     static func get<T: Mappable>(_ object: T, containing: String? = nil, completion: @escaping ([T]) -> Void) {
         
         let url = API.url(for: object, containing: containing)
@@ -203,21 +207,17 @@ struct API {
         })
     }
     
-    static private func postObject<T: Mappable>(url: String, object: T, completion: @escaping (T?, Error?) -> Void ) {
+    static func getQuotes(containing: String? = nil, tags: [String]? = nil, completion: @escaping (QuotesResponse) -> Void) {
         
-        Alamofire.request(url, method: .post, parameters: object.toJSON(), encoding: JSONEncoding.default, headers: API.headers).responseObject { (response: DataResponse<T>) in
-            
-            guard let statusCode = response.response?.statusCode,
-                200..<300 ~= statusCode else {
-                    completion(nil, response.result.error)
-                    return
-            }
-            
-            let responseObject = response.result.value
-            
-            completion(responseObject, nil)
-        }
+        let urlString = Endpoint.quotes.url(search: containing, tags: tags)
         
+        API.getObject(url: urlString, completion: { (response: QuotesResponse?, error: Error?) -> Void in
+            
+            let quotesResponse = response ?? QuotesResponse()
+            
+            completion(quotesResponse)
+            
+        })
     }
     
     static func post<T: Mappable>(object: T, completion: @escaping (T?) -> Void) {

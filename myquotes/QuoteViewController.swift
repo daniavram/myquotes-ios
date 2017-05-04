@@ -28,7 +28,7 @@ class QuoteViewController: UIViewController {
         authorLabel.text = author
         
         creationDateLabel.text = quote?.created
-        quoteTextLabel.text = quote?.text ?? "Quote"
+        quoteTextLabel.htmlText = quote?.text ?? "Quote"
     }
     
     private func initViewInterface() {
