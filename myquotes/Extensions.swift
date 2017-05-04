@@ -142,7 +142,9 @@ extension UILabel {
         
         set {
             
-            var string = String(format: "<style>body{font-family: '%@'; font-size:%fpx;}</style>", self.font.fontName, self.font.pointSize)
+            let font = Font.type(for: .cellQuote)
+            
+            var string = String(format: "<style>body{font-family: '%@'; font-size:%fpx;}</style>", font.fontName, self.font.pointSize)
             string += newValue
             
             guard let unicodedData = string.data(using: .unicode) else {
