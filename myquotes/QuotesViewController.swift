@@ -20,8 +20,24 @@ class QuotesViewController: UITableViewController {
     fileprivate var initialQuotesResponse: QuotesResponse!
     fileprivate var initialQuotes = [Quote]()
     fileprivate var filteredQuotes = [Quote]()
+    
     private var top: CGPoint!
     private var selectedTags = [Tag]()
+    private var selectedCategories = [Category]() {
+        didSet {
+            let filterCell = tableView.cellForRow(at: IndexPath(item: 0, section: 0)) as! FilterCell
+            filterCell.categories = selectedCategories.stringify() ?? "categories"
+        }
+    }
+    private var selectedAuthors = [Author]() {
+        didSet {
+            let filterCell = tableView.cellForRow(at: IndexPath(item: 0, section: 0)) as! FilterCell
+            filterCell.authors = selectedAuthors.stringify() ?? "authors"
+        }
+    }
+    
+    fileprivate var categories: [Category]!
+    fileprivate var authors: [Author]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +69,14 @@ class QuotesViewController: UITableViewController {
         let searchBarHeight = self.searchController.searchBar.frame.size.height
         top = CGPoint(x: tableView.contentOffset.x, y: tableView.contentOffset.y + searchBarHeight)
         
+        API.get(Author(), completion: { authors in
+            self.authors = authors
+        })
+        
+        API.get(Category(), completion: { categories in
+            self.categories = categories
+        })
+        
         self.refreshTable()
         
     }
@@ -67,10 +91,19 @@ class QuotesViewController: UITableViewController {
             let controller = segue.destination as? QuoteViewController {
             
             if let selectedIndex = stateController?.selectedQuoteIndex,
-                let quote = stateController?.quotes?[selectedIndex] {
+                let quote = stateController?.quotes?[selectedIndex - 1] {
                     controller.quote = quote
             }
             
+        } else if segue.identifier == "toFilter",
+            let controller = segue.destination as? FilterController {
+                controller.containingController = self
+                if sender is Category {
+                    controller.properties = self.categories
+                }
+                if sender is Author {
+                    controller.properties = self.authors
+                }
         }
     }
  
@@ -91,6 +124,8 @@ class QuotesViewController: UITableViewController {
     func refreshTable() {
         
         self.selectedTags = [Tag]()
+        self.selectedCategories = [Category]()
+        self.selectedAuthors = [Author]()
         
         API.getQuotes(completion: { quotesResponse in
             guard let quotes = quotesResponse.quotes else {
@@ -124,31 +159,41 @@ class QuotesViewController: UITableViewController {
     
     func tagPressed(_ tag: Tag) {
         
-        let quotesForFiltering: [Quote]!
-        
         if let index = self.selectedTags.index(of: tag) {
-            quotesForFiltering = self.initialQuotes
             self.selectedTags.remove(at: index)
         } else {
-            quotesForFiltering = self.filteredQuotes
             self.selectedTags.append(tag)
         }
         
-        var filteredQuotes = [Quote]()
-        
-        for quote in quotesForFiltering {
-            
-            if quote.has(tags: selectedTags) {
-                filteredQuotes.append(quote)
-            }
-            
-        }
+        let filteredQuotes = self.initialQuotes.filter(by: self.selectedCategories, authors: self.selectedAuthors, tags: self.selectedTags)
 
-        let quotes = filteredQuotes.isEmpty ? self.initialQuotes : filteredQuotes
-        
-        self.stateController?.select(tags: self.selectedTags, in: quotes)
-        self.filteredQuotes = quotes
+        self.stateController?.select(tags: self.selectedTags, in: filteredQuotes)
+        self.filteredQuotes = filteredQuotes
         self.tableView.reloadData()
+    }
+    
+    func categoriesButtonTap() {
+        self.performSegue(withIdentifier: "toFilter", sender: Category())
+    }
+    
+    func authorsButtonTap() {
+        self.performSegue(withIdentifier: "toFilter", sender: Author())
+    }
+    
+    func filterControllerWillClose<T: Property>(with properties: [T]) {
+        
+        if T.self == Category.self {
+            self.selectedCategories = properties as! [Category]
+        }
+        if T.self == Author.self {
+            self.selectedAuthors = properties as! [Author]
+        }
+        
+        let filtered = self.initialQuotes.filter(by: self.selectedCategories, authors: self.selectedAuthors, tags: self.selectedTags)
+        
+        stateController?.quotes = filtered
+        self.filteredQuotes = filtered
+        tableView.reloadData()
     }
     
 }

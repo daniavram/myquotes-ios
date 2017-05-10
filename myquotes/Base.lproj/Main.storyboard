@@ -6,20 +6,60 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Quotes View Controller-->
         <scene sceneID="0Lh-SH-Xaa">
             <objects>
-                <tableViewController id="H9w-J1-X4e" customClass="QuotesViewController" customModule="my_quotes" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Tb9-ys-fch">
+                <tableViewController id="H9w-J1-X4e" customClass="QuotesViewController" customModule="myquotes" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Tb9-ys-fch">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="QuoteCell" rowHeight="200" id="gKs-r5-yfa" customClass="QuoteCell" customModule="my_quotes" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="55.5" width="375" height="200"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FilterCell" id="x7R-Ph-dJt" customClass="FilterCell" customModule="myquotes" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x7R-Ph-dJt" id="UNm-Ld-jQl">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZD8-5t-qD1">
+                                            <rect key="frame" x="0.0" y="0.0" width="187.5" height="43.5"/>
+                                            <state key="normal" title="Button"/>
+                                            <connections>
+                                                <action selector="categoriesButtonTap:" destination="x7R-Ph-dJt" eventType="touchUpInside" id="wUF-4f-VJM"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lIz-yU-XRz">
+                                            <rect key="frame" x="187.5" y="0.0" width="187.5" height="43.5"/>
+                                            <state key="normal" title="Button"/>
+                                            <connections>
+                                                <action selector="authorsButtonTap:" destination="x7R-Ph-dJt" eventType="touchUpInside" id="wdg-UB-2BJ"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="lIz-yU-XRz" secondAttribute="trailing" id="27u-kS-weJ"/>
+                                        <constraint firstAttribute="bottom" secondItem="lIz-yU-XRz" secondAttribute="bottom" id="3bA-ie-yhR"/>
+                                        <constraint firstItem="ZD8-5t-qD1" firstAttribute="leading" secondItem="UNm-Ld-jQl" secondAttribute="leading" id="CpM-1R-dhL"/>
+                                        <constraint firstAttribute="bottom" secondItem="ZD8-5t-qD1" secondAttribute="bottom" id="ReK-rc-t14"/>
+                                        <constraint firstItem="ZD8-5t-qD1" firstAttribute="top" secondItem="UNm-Ld-jQl" secondAttribute="top" id="Sds-Qc-Lml"/>
+                                        <constraint firstItem="lIz-yU-XRz" firstAttribute="width" secondItem="UNm-Ld-jQl" secondAttribute="width" multiplier="0.5" id="aGg-r3-C0P"/>
+                                        <constraint firstItem="ZD8-5t-qD1" firstAttribute="width" secondItem="UNm-Ld-jQl" secondAttribute="width" multiplier="0.5" id="lG2-5d-wYl"/>
+                                        <constraint firstItem="lIz-yU-XRz" firstAttribute="top" secondItem="UNm-Ld-jQl" secondAttribute="top" id="vWk-id-kfw"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="authorsButton" destination="lIz-yU-XRz" id="ZHW-Ws-Tj3"/>
+                                    <outlet property="categoriesButton" destination="ZD8-5t-qD1" id="iB8-aD-WNG"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="QuoteCell" rowHeight="200" id="gKs-r5-yfa" customClass="QuoteCell" customModule="myquotes" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="99.5" width="375" height="200"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gKs-r5-yfa" id="POO-kY-sVf">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
@@ -85,6 +125,7 @@
                     </refreshControl>
                     <connections>
                         <segue destination="Sjc-vu-acu" kind="presentation" identifier="toAddQuote" id="fNV-Qq-PIu"/>
+                        <segue destination="qMb-i5-qxC" kind="presentation" identifier="toFilter" modalPresentationStyle="overCurrentContext" id="L6R-sl-3WJ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uMa-hA-AC7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -94,7 +135,7 @@
         <!--Add Quote View Controller-->
         <scene sceneID="uNu-O4-XdG">
             <objects>
-                <viewController id="kL1-CR-Imf" customClass="AddQuoteViewController" customModule="my_quotes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="kL1-CR-Imf" customClass="AddQuoteViewController" customModule="myquotes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vQs-U4-ddN"/>
                         <viewControllerLayoutGuide type="bottom" id="Zta-Ri-scG"/>
@@ -251,12 +292,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8V9-jt-UBd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2096.8000000000002" y="1066.4167916041979"/>
+            <point key="canvasLocation" x="2286" y="132"/>
         </scene>
         <!--Quote View Controller-->
         <scene sceneID="tiJ-3l-eTe">
             <objects>
-                <viewController id="Bqq-DT-ZSH" customClass="QuoteViewController" customModule="my_quotes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Bqq-DT-ZSH" customClass="QuoteViewController" customModule="myquotes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WSK-En-PFZ"/>
                         <viewControllerLayoutGuide type="bottom" id="7de-os-VZ1"/>
@@ -341,14 +382,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5O-5u-7dC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1096.8" y="131.78410794602701"/>
+            <point key="canvasLocation" x="1238" y="-684"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ki7-Wu-EJh">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Wq1-Kk-34z" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="spe-8e-bDS">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="spe-8e-bDS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -364,7 +405,7 @@
         <!--Login View Controller-->
         <scene sceneID="KAu-1B-gMw">
             <objects>
-                <viewController id="ezh-1w-gDs" customClass="LoginViewController" customModule="my_quotes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ezh-1w-gDs" customClass="LoginViewController" customModule="myquotes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="eWz-BH-Qwi"/>
                         <viewControllerLayoutGuide type="bottom" id="ZeB-7P-zmj"/>
@@ -455,7 +496,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Sjc-vu-acu" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="WOu-Va-gB1">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="WOu-Va-gB1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -466,7 +507,71 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s8J-nj-kpq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1097" y="1068"/>
+            <point key="canvasLocation" x="1239" y="132"/>
+        </scene>
+        <!--Filter Controller-->
+        <scene sceneID="JvM-k1-Nek">
+            <objects>
+                <viewController id="qMb-i5-qxC" customClass="FilterController" customModule="myquotes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kSu-Cc-uBS"/>
+                        <viewControllerLayoutGuide type="bottom" id="F0U-u8-8Vf"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="Dn2-6W-yyS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MXX-IS-9oC">
+                                <rect key="frame" x="59" y="206.5" width="256" height="254"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-vA-b9r">
+                                        <rect key="frame" x="8" y="8" width="240" height="200"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="240" id="W2s-XP-RGL"/>
+                                            <constraint firstAttribute="height" constant="200" id="eo6-h4-ic1"/>
+                                        </constraints>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="qMb-i5-qxC" id="twF-Wk-kFh"/>
+                                            <outlet property="delegate" destination="qMb-i5-qxC" id="nM4-ie-AXC"/>
+                                        </connections>
+                                    </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uET-kS-wGU">
+                                        <rect key="frame" x="8" y="216" width="240" height="30"/>
+                                        <state key="normal" title="Select"/>
+                                        <connections>
+                                            <action selector="dismiss:" destination="qMb-i5-qxC" eventType="touchUpInside" id="X1S-py-seC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.90013362975266253" green="0.90904584390862941" blue="0.90904584390862941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="Nvl-vA-b9r" firstAttribute="top" secondItem="MXX-IS-9oC" secondAttribute="top" constant="8" id="EIi-4q-GNI"/>
+                                    <constraint firstAttribute="bottom" secondItem="uET-kS-wGU" secondAttribute="bottom" constant="8" id="I38-Rt-rFP"/>
+                                    <constraint firstAttribute="trailing" secondItem="Nvl-vA-b9r" secondAttribute="trailing" constant="8" id="MFT-1i-I6S"/>
+                                    <constraint firstItem="Nvl-vA-b9r" firstAttribute="leading" secondItem="MXX-IS-9oC" secondAttribute="leading" constant="8" id="SvV-eU-1ag"/>
+                                    <constraint firstItem="uET-kS-wGU" firstAttribute="leading" secondItem="MXX-IS-9oC" secondAttribute="leading" constant="8" id="Uum-5L-S3o"/>
+                                    <constraint firstItem="uET-kS-wGU" firstAttribute="top" secondItem="Nvl-vA-b9r" secondAttribute="bottom" constant="8" id="aCI-nz-CXZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="uET-kS-wGU" secondAttribute="trailing" constant="8" id="hVK-eZ-F6X"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="MXX-IS-9oC" firstAttribute="centerX" secondItem="Dn2-6W-yyS" secondAttribute="centerX" id="QVz-cG-fU7"/>
+                            <constraint firstItem="MXX-IS-9oC" firstAttribute="centerY" secondItem="Dn2-6W-yyS" secondAttribute="centerY" id="SUc-7r-9t9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="MXX-IS-9oC" id="7kX-vQ-nkH"/>
+                        <outlet property="tableView" destination="Nvl-vA-b9r" id="uVx-Qi-c4h"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="znm-Oj-5wc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1237.5999999999999" y="981.85907046476768"/>
         </scene>
     </scenes>
     <resources>

@@ -26,11 +26,19 @@ class QuotesDatasource: NSObject {
 extension QuotesDatasource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard indexPath.row != 0 else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
+            cell.containingController = self.viewController
+            
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: QuoteCell.identifier, for: indexPath) as! QuoteCell
         
         cell.containingController = self.viewController
 
-        let quote = stateController.quotes?[indexPath.row]
+        let quote = stateController.quotes?[indexPath.row - 1]
         
         cell.title = quote?.title ?? "no title"
         cell.quoteText = quote?.text ?? "no text"
@@ -41,9 +49,11 @@ extension QuotesDatasource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let numberOfRows = stateController.quotes?.count ?? 0
+        guard let numberOfRows = stateController.quotes?.count else {
+            return 1
+        }
         
-        return numberOfRows
+        return numberOfRows + 1
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -58,7 +68,7 @@ extension QuotesDatasource: UITableViewDataSource {
             
             self.tableView.displayEmptyView(withText: "No Quotes to display.\nPull to refresh or\nAdd a new Quote")
             self.tableView.separatorStyle = .none
-            return 0
+            return 1
             
         }
     }

@@ -34,19 +34,19 @@ extension Theme {
             return UIColor(red:0.13, green:0.81, blue:0.51, alpha:1.00)
         case .secondary:
             // Vivid Cerise
-            return UIColor(red: 0.84, green: 0.09, blue: 0.47, alpha: 1.00)
+            return UIColor(red:0.84, green:0.09, blue:0.47, alpha:1.00)
         case .warning:
             // Pink Orange
-            return UIColor(red: 1.00, green: 0.58, blue: 0.44, alpha: 1.00)
+            return UIColor(red:1.00, green:0.58, blue:0.44, alpha:1.00)
         case .lightText:
             // Lily White
-            return UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00)
+            return UIColor(red:0.92, green:0.92, blue:0.92, alpha:1.00)
         case .lightBackground:
             // Geyser
             return UIColor(red:0.80, green:0.81, blue:0.81, alpha:1.00)
         case .darkText, .darkBackground:
             // Dove Gray
-            return UIColor(red: 0.45, green: 0.45, blue: 0.45, alpha: 1.00)
+            return UIColor(red:0.45, green:0.45, blue:0.45, alpha:1.00)
         }
     }
     
@@ -77,6 +77,9 @@ extension Theme {
         let searchBar = UISearchBar.appearance()
         searchBar.tintColor = Theme.primary.color
 //        searchBar.barTintColor = Theme.lightBackground.color
+        
+        let button = UIButton.appearance()
+        button.tintColor = Theme.primary.color        
     }
     
 }

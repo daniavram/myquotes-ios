@@ -114,18 +114,40 @@ class Quote: Mappable {
         self._tags <- map["tags"]
     }
     
-    func has(tags searchTags: [Tag]) -> Bool {
+    func has(all tags: [Tag]) -> Bool {
         
-        guard let tags = self.tags else {
+        guard let selfTags = self.tags else {
             return false
         }
         
-        let tagsSet = Set(tags)
-        let tagsSubset = Set(searchTags)
+        let tagsSet = Set(selfTags)
+        let tagsSubset = Set(tags)
         
         let isSubset = tagsSubset.isSubset(of: tagsSet)
         
         return isSubset
+    }
+    
+    func has(one properties: [Property]) -> Bool {
+        
+        var property: Property? = nil
+        
+        if properties is [Author] {
+            property = self.author
+        }
+        if properties is [Category] {
+            property = self.category
+        }
+        
+        guard let filterProperty = property else {
+            return false
+        }
+        
+        let set = Set(properties)
+        
+        let contains = set.contains(filterProperty)
+        
+        return contains
     }
     
 }

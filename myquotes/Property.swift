@@ -48,3 +48,19 @@ class Property: Mappable {
     }
     
 }
+
+extension Property: Equatable {
+    
+    static func == (lhs: Property, rhs: Property) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+}
+
+extension Property: Hashable {
+    
+    var hashValue: Int {
+        return self.id!
+    }
+    
+}

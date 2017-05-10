@@ -35,6 +35,8 @@
 		8E6977F11E735C9D004114C3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6977F01E735C9D004114C3 /* Extensions.swift */; };
 		8E6BA5E01E9F79FA00537481 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6BA5DF1E9F79FA00537481 /* LoginViewController.swift */; };
 		8E6BA5E21E9F9B7000537481 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6BA5E11E9F9B7000537481 /* Keychain.swift */; };
+		8E6F0CA21EBC98FB00A5D740 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6F0CA11EBC98FB00A5D740 /* FilterCell.swift */; };
+		8E95163C1EC0532B00F9401F /* FilterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95163B1EC0532B00F9401F /* FilterController.swift */; };
 		8EA2DB041EA1F64D00512A59 /* PropertyDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA2DB031EA1F64D00512A59 /* PropertyDatasource.swift */; };
 		8EA2DB061EA1F69500512A59 /* PropertyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA2DB051EA1F69500512A59 /* PropertyViewController.swift */; };
 		8EA2DB081EA1FADB00512A59 /* PropertyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA2DB071EA1FADA00512A59 /* PropertyDelegate.swift */; };
@@ -112,6 +114,8 @@
 		8E6977F01E735C9D004114C3 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8E6BA5DF1E9F79FA00537481 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8E6BA5E11E9F9B7000537481 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		8E6F0CA11EBC98FB00A5D740 /* FilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
+		8E95163B1EC0532B00F9401F /* FilterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterController.swift; sourceTree = "<group>"; };
 		8EA2DB031EA1F64D00512A59 /* PropertyDatasource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyDatasource.swift; sourceTree = "<group>"; };
 		8EA2DB051EA1F69500512A59 /* PropertyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyViewController.swift; sourceTree = "<group>"; };
 		8EA2DB071EA1FADA00512A59 /* PropertyDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyDelegate.swift; sourceTree = "<group>"; };
@@ -300,6 +304,7 @@
 				8EF12C601E815491007B879D /* AddQuoteViewController.swift */,
 				8E6BA5DF1E9F79FA00537481 /* LoginViewController.swift */,
 				8EA2DB051EA1F69500512A59 /* PropertyViewController.swift */,
+				8E95163B1EC0532B00F9401F /* FilterController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				8EA7A85F1E72E4C6003DA83E /* QuoteCell.swift */,
+				8E6F0CA11EBC98FB00A5D740 /* FilterCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -662,7 +668,9 @@
 				8EA7A8561E71A781003DA83E /* QuotesResponse.swift in Sources */,
 				8E0F42EE1E715C04002D1D7B /* AppDelegate.swift in Sources */,
 				8EA7A8541E717A50003DA83E /* API.swift in Sources */,
+				8E6F0CA21EBC98FB00A5D740 /* FilterCell.swift in Sources */,
 				8E37D5151E7166A300570382 /* Logger.swift in Sources */,
+				8E95163C1EC0532B00F9401F /* FilterController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

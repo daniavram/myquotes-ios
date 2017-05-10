@@ -118,17 +118,78 @@ extension Array where Element: Tag {
         }
         return nil
     }
+}
+
+extension Array where Element: Property {
+
+    func stringify() -> String? {
+        
+        var name = ""
+        
+        guard !self.isEmpty else {
+            return nil
+        }
+        
+        for property in self {
+            if property.id == self.first?.id {
+                name = property.name!
+            } else {
+                name += ", " + property.name!
+            }
+            
+        }
+        
+        return name
+    }
     
-    func stringify() -> [String] {
-        var tagsIds = [String]()
+    func stringIds() -> [String] {
+        
+        var ids = [String]()
         
         for iterator in self {
             if let id = iterator.id {
-                tagsIds.append("\(id)")
+                ids.append("\(id)")
             }
         }
         
-        return tagsIds
+        return ids
+    }
+    
+}
+
+extension Array where Element: Quote {
+    
+    func filter(by categories: [Category], authors: [Author], tags: [Tag]) -> [Quote] {
+        
+        if categories.isEmpty && authors.isEmpty && tags.isEmpty {
+            return self
+        }
+        
+        var filtered = [Quote]()
+        
+        for quote in self {
+            var hasCategory = quote.has(one: categories)
+            var hasAuthor = quote.has(one: authors)
+            var hasTags = quote.has(all: tags)
+            
+            if categories.isEmpty {
+                hasCategory = true
+            }
+            if authors.isEmpty {
+                hasAuthor = true
+            }
+            if tags.isEmpty {
+                hasTags = true
+            }
+            
+            if hasCategory && hasAuthor && hasTags {
+                filtered.append(quote)
+            }
+            
+        }
+        
+        
+        return filtered
     }
     
 }
